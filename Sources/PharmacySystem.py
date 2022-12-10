@@ -1,5 +1,7 @@
 # Copyright 2022 DZavodov. All Rights Reserved.
 
+import sys
+
 class Product:
 	"""
 	"""
@@ -25,7 +27,7 @@ class ProductIterator:
 	"""
 	"""
 	
-	def __init__(this, products: list[Product], name:str, manufacturer:str, country:str):
+	def __init__(this, products: list[Product], name:str, manufacturer:str, country:str, priceMin:int, priceMax:int):
 		"""
 		"""
 
@@ -44,6 +46,12 @@ class ProductIterator:
 		this.__country = country
 		"""
 		"""
+		this.__priceMin = priceMin
+		"""
+		"""
+		this.__priceMax = priceMax
+		"""
+		"""
 
 	def GoToNext(this):
 		"""
@@ -54,7 +62,7 @@ class ProductIterator:
 			this.__index += 1
 			product = this.__products[this.__index]
 
-			if this.__name in product.name and this.__manufacturer in product.manufacturer and this.__country in product.country:
+			if this.__name in product.name and this.__manufacturer in product.manufacturer and this.__country in product.country and product.price >= this.__priceMin and product.price <= this.__priceMax:
 				return product
 
 		return None
@@ -83,10 +91,10 @@ class StorageSystem:
 
 		this.__products.append(value)
 
-	def CreateIterator(this, name:str, manufacturer:str, country:str):
+	def CreateIterator(this, name:str, manufacturer:str, country:str, priceMin:int, priceMax:int):
 		"""
 		"""
-		return ProductIterator(this.__products, name, manufacturer, country)
+		return ProductIterator(this.__products, name, manufacturer, country, priceMin, priceMax)
 
 class PaymentSystem:
 	"""
@@ -131,12 +139,12 @@ class Facade:
 		"""
 		"""
 
-	def Search(this, name = "", manufacturer = "", country = ""):
+	def Search(this, name = "", manufacturer = "", country = "", priceMin = 0, priceMax = sys.maxsize):
 		"""
 		"""
 
 		searchProducts:list[Product] = []
-		storageIterator = this.storage.CreateIterator(name, manufacturer, country)
+		storageIterator = this.storage.CreateIterator(name, manufacturer, country, priceMin, priceMax)
 		while storageIterator.GoToNext():
 			searchProducts.append(storageIterator.GetCurrent())
 
@@ -169,7 +177,7 @@ if __name__ == "__main__":
 
 	facade.payment.DecrementMoney(-5)
 
-	facade.basketProducts = facade.Search(name = "None0")
+	facade.basketProducts = facade.Search(name = "None0", priceMin = 1)
 
 	for product in facade.basketProducts:
 		print(product.price)
