@@ -45,7 +45,7 @@ class StorageIterator:
 		"""
 		"""
 
-	def Next(this):
+	def GoToNext(this):
 		"""
 		"""
 
@@ -58,6 +58,12 @@ class StorageIterator:
 				return product
 
 		return None
+
+	def GetElement(this):
+		"""
+		"""
+
+		return this.__products[this.__index]
 
 class StorageSystem:
 	"""
@@ -82,29 +88,51 @@ class StorageSystem:
 		"""
 		return StorageIterator(this.__products, name, manufacturer, country)
 
+class PaymentSystem:
+	"""
+	"""
+
+	def __init__(this):
+		"""
+		"""
+
+		this.__money = 0
+		"""
+		"""
+
+	def GetMoney(this):
+		"""
+		"""
+
+		return this.__money
+
 class Facade:
 	"""
 	Facade
 	"""
-	
-	def __init__(this, storage:StorageSystem):
+
+	def __init__(this, storage:StorageSystem, payment:PaymentSystem):
 		"""
 		"""
 
 		this.__storage = storage
 		"""
 		"""
+		this.__payment = payment
+		"""
+		"""
 
 if __name__ == "__main__":
 	storage = StorageSystem()
-	storage.AddProduct(Product("None0","None0","None0",0))
-	storage.AddProduct(Product("None100","None0","None1",0))
-	storage.AddProduct(Product("None0","None1","None1",0))
+	storage.AddProduct(Product("None0", "None0", "None0", 0))
+	storage.AddProduct(Product("None0", "None0", "None1", 1))
+	storage.AddProduct(Product("None0", "None1", "None1", 2))
+	storage.AddProduct(Product("None1", "None1", "None1", 3))
 
-	storageIterator = storage.CreateIterator(name = "None0", manufacturer = "None0")
-	value = storageIterator.Next()
-	while value:
-		print(value)
-		value = storageIterator.Next()
+	storageIterator = storage.CreateIterator(name = "None")
+	while storageIterator.GoToNext():
+		print(storageIterator.GetElement())
 
-	facade = Facade(storage)
+	payment = PaymentSystem()
+
+	facade = Facade(storage, payment)
