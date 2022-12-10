@@ -21,7 +21,7 @@ class Product:
 		"""
 		"""
 
-class StorageIterator:
+class ProductIterator:
 	"""
 	"""
 	
@@ -32,7 +32,7 @@ class StorageIterator:
 		this.__products = products
 		"""
 		"""
-		this.__index = 0
+		this.__index = -1
 		"""
 		"""
 		this.__name = name
@@ -49,17 +49,17 @@ class StorageIterator:
 		"""
 		"""
 
-		while this.__index < len(this.__products):
+		while this.__index < len(this.__products) - 1:
 
-			product = this.__products[this.__index]
 			this.__index += 1
+			product = this.__products[this.__index]
 
 			if this.__name in product.name and this.__manufacturer in product.manufacturer and this.__country in product.country:
 				return product
 
 		return None
 
-	def GetElement(this):
+	def GetCurrent(this):
 		"""
 		"""
 
@@ -83,10 +83,10 @@ class StorageSystem:
 
 		this.__products.append(value)
 
-	def CreateIterator(this, name = "", manufacturer = "", country = ""):
+	def CreateIterator(this, name:str, manufacturer:str, country:str):
 		"""
 		"""
-		return StorageIterator(this.__products, name, manufacturer, country)
+		return ProductIterator(this.__products, name, manufacturer, country)
 
 class PaymentSystem:
 	"""
@@ -106,33 +106,72 @@ class PaymentSystem:
 
 		return this.__money
 
+	def DecrementMoney(this, value: int):
+		"""
+		"""
+
+		this.__money -= value
+
 class Facade:
 	"""
-	Facade
 	"""
 
-	def __init__(this, storage:StorageSystem, payment:PaymentSystem):
+	def __init__(this, storage = StorageSystem(), payment = PaymentSystem()):
 		"""
 		"""
 
-		this.__storage = storage
+		this.storage = storage
 		"""
 		"""
-		this.__payment = payment
+		this.payment = payment
 		"""
 		"""
+
+		this.basketProducts:list[Product] = []
+		"""
+		"""
+
+	def Search(this, name = "", manufacturer = "", country = ""):
+		"""
+		"""
+
+		searchProducts:list[Product] = []
+		storageIterator = this.storage.CreateIterator(name, manufacturer, country)
+		while storageIterator.GoToNext():
+			searchProducts.append(storageIterator.GetCurrent())
+
+		return searchProducts
+
+	def TryBuy(this):
+		"""
+		"""
+
+		price = 0
+		for product in this.basketProducts:
+			price += product.price
+
+		if price > this.payment.GetMoney():
+			return False
+
+		this.payment.DecrementMoney(price)
+
+		this.basketProducts.clear()
+
+		return True
 
 if __name__ == "__main__":
-	storage = StorageSystem()
-	storage.AddProduct(Product("None0", "None0", "None0", 0))
-	storage.AddProduct(Product("None0", "None0", "None1", 1))
-	storage.AddProduct(Product("None0", "None1", "None1", 2))
-	storage.AddProduct(Product("None1", "None1", "None1", 3))
+	facade = Facade()
 
-	storageIterator = storage.CreateIterator(name = "None")
-	while storageIterator.GoToNext():
-		print(storageIterator.GetElement())
+	facade.storage.AddProduct(Product("None0", "None0", "None0", 0))
+	facade.storage.AddProduct(Product("None0", "None0", "None1", 1))
+	facade.storage.AddProduct(Product("None0", "None1", "None1", 2))
+	facade.storage.AddProduct(Product("None1", "None1", "None1", 3))
 
-	payment = PaymentSystem()
+	facade.payment.DecrementMoney(-5)
 
-	facade = Facade(storage, payment)
+	facade.basketProducts = facade.Search(name = "None0")
+
+	for product in facade.basketProducts:
+		print(product.price)
+	print(facade.TryBuy())
+	print(facade.payment.GetMoney())
