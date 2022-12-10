@@ -1,6 +1,6 @@
 # Copyright 2022 DZavodov. All Rights Reserved.
 
-import sys
+from sys import maxsize
 
 class Product:
 	"""
@@ -139,7 +139,7 @@ class Facade:
 		"""
 		"""
 
-	def Search(this, name = "", manufacturer = "", country = "", priceMin = 0, priceMax = sys.maxsize):
+	def Search(this, name = "", manufacturer = "", country = "", priceMin = 0, priceMax = maxsize):
 		"""
 		"""
 
