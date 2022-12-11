@@ -141,7 +141,7 @@ class Facade:
 		"""
 		"""
 
-	def Search(this, name = "", manufacturer = "", country = "", priceMin = 0, priceMax = maxsize):
+	def Search(this, name = "", manufacturer = "", country = "", priceMin = 0, priceMax = maxsize, limit = maxsize):
 		"""
 		"""
 
@@ -149,6 +149,8 @@ class Facade:
 		storageIterator = this.storage.CreateIterator(name, manufacturer, country, priceMin, priceMax)
 		while storageIterator.GoToNext():
 			searchProducts.append(storageIterator.GetCurrent())
+			if len(searchProducts) >= limit:
+				break
 
 		return searchProducts
 
@@ -170,17 +172,32 @@ class Facade:
 		return True
 
 if __name__ == "__main__":
-	
+	facade = Facade()
+
+	facade.storage.AddProduct(Product("None0", "None0", "None0", 0))
+	facade.storage.AddProduct(Product("None0", "None0", "None1", 1))
+	facade.storage.AddProduct(Product("None0", "None1", "None1", 2))
+	facade.storage.AddProduct(Product("None1", "None1", "None1", 3))
+	facade.storage.AddProduct(Product("None2", "None1", "None1", 3))
+	facade.storage.AddProduct(Product("None3", "None1", "None1", 3))
+	facade.storage.AddProduct(Product("None4", "None1", "None1", 3))
+	facade.storage.AddProduct(Product("None5", "None1", "None1", 3))
+	facade.storage.AddProduct(Product("None6", "None1", "None1", 3))
+	facade.storage.AddProduct(Product("None7", "None1", "None1", 3))
+	facade.storage.AddProduct(Product("None8", "None1", "None1", 3))
+	facade.storage.AddProduct(Product("None9", "None1", "None1", 3))
+
+	# View
 	windows = Tk()
 	windows.geometry('1000x600')
-	
+
 	frame = Frame(windows, padx=5, pady=5)
 	frame.grid(row=0, column=1)
 	Label(frame, text='Pharmacy System', padx=5, pady=5).pack()
-	
+
 	frame1 = Frame(windows, padx=5, pady=5)
 	frame1.grid(row=2, column=0)
-	
+
 	rows = 5
 	columns = 5
 	for i in range(rows):
@@ -190,16 +207,16 @@ if __name__ == "__main__":
 			if j == 4:
 				Button(frame1, text=f'{i} {j}', padx=5, pady=5, width=15, height=2).grid(row=i, column=j)
 		#windows.grid_columnconfigure(i, minsize=400)
-	
+
 	#Label(frame1, text='Name', padx=5, pady=5).pack()
 	#Label(frame1, text='Email', padx=5, pady=5).pack()
 	#Label(frame1, text='Password', padx=5, pady=5).pack()
 	
 	frame2 = Frame(windows, padx=5, pady=5)
 	frame2.grid(row=2, column=1)
-	
+
 	#for i in range(rows):
 	#	for j in range(1):
 	#		Button(frame2, text='{i} {j}', padx=5, pady=5, width=15, height=2).grid(row=i, column=j)
-	
+
 	mainloop()
