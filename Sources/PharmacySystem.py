@@ -289,6 +289,7 @@ if __name__ == "__main__":
 
 		if facade.TryBuy():
 			UpdateMoney()
+			UpdateBasketProducts()
 
 	CreateButton(basketProductsFrame, "Козырнуть зеленью", TryBuy).grid(row=1, column=4)
 
