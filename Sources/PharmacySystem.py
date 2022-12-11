@@ -1,6 +1,8 @@
 # Copyright 2022 DZavodov. All Rights Reserved.
 
 from sys import maxsize
+from tkinter import *
+from tkinter import ttk
 
 class Product:
 	"""
@@ -168,18 +170,36 @@ class Facade:
 		return True
 
 if __name__ == "__main__":
-	facade = Facade()
-
-	facade.storage.AddProduct(Product("None0", "None0", "None0", 0))
-	facade.storage.AddProduct(Product("None0", "None0", "None1", 1))
-	facade.storage.AddProduct(Product("None0", "None1", "None1", 2))
-	facade.storage.AddProduct(Product("None1", "None1", "None1", 3))
-
-	facade.payment.DecrementMoney(-5)
-
-	facade.basketProducts = facade.Search(name = "None0", priceMin = 1)
-
-	for product in facade.basketProducts:
-		print(product.price)
-	print(facade.TryBuy())
-	print(facade.payment.GetMoney())
+	
+	windows = Tk()
+	windows.geometry('1000x600')
+	
+	frame = Frame(windows, padx=5, pady=5)
+	frame.grid(row=0, column=1)
+	Label(frame, text='Pharmacy System', padx=5, pady=5).pack()
+	
+	frame1 = Frame(windows, padx=5, pady=5)
+	frame1.grid(row=2, column=0)
+	
+	rows = 5
+	columns = 5
+	for i in range(rows):
+		for j in range(columns):
+			Label(frame1, text=f'{i} {j}', padx=5, pady=5, fg='red', bg='yellow', 
+				width=15, height=2).grid(row=i, column=j, sticky="we")
+			if j == 4:
+				Button(frame1, text=f'{i} {j}', padx=5, pady=5, width=15, height=2).grid(row=i, column=j)
+		#windows.grid_columnconfigure(i, minsize=400)
+	
+	#Label(frame1, text='Name', padx=5, pady=5).pack()
+	#Label(frame1, text='Email', padx=5, pady=5).pack()
+	#Label(frame1, text='Password', padx=5, pady=5).pack()
+	
+	frame2 = Frame(windows, padx=5, pady=5)
+	frame2.grid(row=2, column=1)
+	
+	#for i in range(rows):
+	#	for j in range(1):
+	#		Button(frame2, text='{i} {j}', padx=5, pady=5, width=15, height=2).grid(row=i, column=j)
+	
+	mainloop()
