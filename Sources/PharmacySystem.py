@@ -251,7 +251,7 @@ if __name__ == "__main__":
 		products = facade.Search(name = "None", limit = 10)
 		for index in range(len(products)):
 			product = products[index]
-			CreateProduct(searchProductsFrame, index + 2, product, ">", lambda: AddBasketProduct(product))
+			CreateProduct(searchProductsFrame, index + 2, product, ">", lambda product=product: AddBasketProduct(product))
 
 	CreateButton(searchProductsFrame, "Найти", None).grid(row=1, column=4)
 
