@@ -208,9 +208,9 @@ if __name__ == "__main__":
 		"""
 		"""
 
-		return Button(root, text=text, padx=5, pady=5, width=15, height=0)
+		return Button(root, text=text, command=command, padx=5, pady=5, width=15, height=0)
 
-	def CreateProduct(root:Misc, index:int, product:Product, buttonText:str):
+	def CreateProduct(root:Misc, index:int, product:Product, buttonText:str, buttonCommand):
 		"""
 		"""
 
@@ -219,20 +219,17 @@ if __name__ == "__main__":
 		CreateLabel(root, index, 2, product.country)
 		CreateLabel(root, index, 3, product.price)
 
-		CreateButton(root, buttonText, None).grid(row=index, column=4)
+		CreateButton(root, buttonText, buttonCommand).grid(row=index, column=4)
 
 	CreateLabel(searchProductsFrame, 0, 0, "Наименование")
 	CreateLabel(searchProductsFrame, 0, 1, "Производитель")
 	CreateLabel(searchProductsFrame, 0, 2, "Страна")
 	CreateLabel(searchProductsFrame, 0, 3, "Цена")
 
-	def CreateEntry(column:int):
-		Entry(searchProductsFrame).grid(row=1, column=column, sticky="we")
-
-	CreateEntry(0)
-	CreateEntry(1)
-	CreateEntry(2)
-	CreateEntry(3)
+	Entry(searchProductsFrame).grid(row=1, column=0, sticky="we")
+	Entry(searchProductsFrame).grid(row=1, column=1, sticky="we")
+	Entry(searchProductsFrame).grid(row=1, column=2, sticky="we")
+	Entry(searchProductsFrame).grid(row=1, column=3, sticky="we")
 
 	def UpdateSearchProducts():
 		"""
@@ -243,7 +240,7 @@ if __name__ == "__main__":
 
 		products = facade.Search(name = "None", limit = 10)
 		for index in range(len(products)):
-			CreateProduct(searchProductsFrame, index + 2, products[index], ">")
+			CreateProduct(searchProductsFrame, index + 2, products[index], ">", None)
 
 	CreateButton(searchProductsFrame, "Найти", None).grid(row=1, column=4)
 
@@ -262,6 +259,14 @@ if __name__ == "__main__":
 	CreateLabel(basketProductsFrame, 0, 2, "Страна")
 	CreateLabel(basketProductsFrame, 0, 3, "Цена")
 
+	def DeleteBasketProduct(index:int):
+		"""
+		"""
+
+		facade.basketProducts.pop(index)
+
+		UpdateBasketProducts()
+
 	def UpdateBasketProducts():
 		"""
 		"""
@@ -270,7 +275,7 @@ if __name__ == "__main__":
 			basketProductsFrame.winfo_children().pop().destroy()
 
 		for index in range(len(facade.basketProducts)):
-			CreateProduct(basketProductsFrame, index + 1, facade.basketProducts[index], "X")
+			CreateProduct(basketProductsFrame, index + 1, facade.basketProducts[index], "X", lambda index=index: DeleteBasketProduct(index))
 
 	UpdateBasketProducts()
 
