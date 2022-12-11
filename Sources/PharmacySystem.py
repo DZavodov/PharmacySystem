@@ -187,6 +187,8 @@ if __name__ == "__main__":
 	facade.storage.AddProduct(Product("None8", "None1", "None1", 3))
 	facade.storage.AddProduct(Product("None9", "None1", "None1", 3))
 
+	facade.payment.DecrementMoney(-100)
+
 	# View
 	windows = Tk()
 	windows.geometry('1400x600')
@@ -270,6 +272,26 @@ if __name__ == "__main__":
 	CreateLabel(basketProductsFrame, "Страна").grid(row=0, column=2)
 	CreateLabel(basketProductsFrame, "Цена").grid(row=0, column=3)
 
+	moneyLabel = CreateLabel(basketProductsFrame, "Цена")
+	moneyLabel.grid(row=0, column=4)
+
+	def UpdateMoney():
+		"""
+		"""
+
+		moneyLabel.config(text = facade.payment.GetMoney())
+
+	UpdateMoney()
+
+	def TryBuy():
+		"""
+		"""
+
+		if facade.TryBuy():
+			UpdateMoney()
+
+	CreateButton(basketProductsFrame, "Козырнуть зеленью", TryBuy).grid(row=1, column=4)
+
 	basketProductsFrameHeadSize = len(basketProductsFrame.winfo_children())
 	def UpdateBasketProducts():
 		"""
@@ -287,8 +309,6 @@ if __name__ == "__main__":
 			UpdateBasketProducts()
 
 		for index in range(len(facade.basketProducts)):
-			CreateProduct(basketProductsFrame, index + 1, facade.basketProducts[index], "X", lambda index=index: RemoveBasketProduct(index))
-
-	UpdateBasketProducts()
+			CreateProduct(basketProductsFrame, index + 2, facade.basketProducts[index], "X", lambda index=index: RemoveBasketProduct(index))
 
 	mainloop()
