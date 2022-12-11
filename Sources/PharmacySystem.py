@@ -189,7 +189,7 @@ if __name__ == "__main__":
 
 	# View
 	windows = Tk()
-	windows.geometry('1000x600')
+	windows.geometry('1400x600')
 
 	headerFrame = Frame(windows, padx=5, pady=5)
 	headerFrame.grid(row=0, column=1)
@@ -227,12 +227,13 @@ if __name__ == "__main__":
 	CreateLabel(searchProductsFrame, "Страна").grid(row=0, column=2)
 	CreateLabel(searchProductsFrame, "Цена").grid(row=0, column=3)
 
-	Entry(searchProductsFrame).grid(row=1, column=0)
-	Entry(searchProductsFrame).grid(row=1, column=1)
-	Entry(searchProductsFrame).grid(row=1, column=2)
-	Entry(searchProductsFrame).grid(row=1, column=3)
+	searchNameEntry = Entry(searchProductsFrame)
+	searchNameEntry.grid(row=1, column=0)
+	searchManufacturerEntry = Entry(searchProductsFrame)
+	searchManufacturerEntry.grid(row=1, column=1)
+	searchCountryEntry = Entry(searchProductsFrame)
+	searchCountryEntry.grid(row=1, column=2)
 
-	searchProductsFrameHeadSize = len(searchProductsFrame.winfo_children())
 	def UpdateSearchProducts():
 		"""
 		"""
@@ -247,13 +248,16 @@ if __name__ == "__main__":
 
 		for index in range(len(searchProductsFrame.winfo_children()) - searchProductsFrameHeadSize):
 			searchProductsFrame.winfo_children().pop().destroy()
-
-		products = facade.Search(name = "None", limit = 10)
+			
+		products = facade.Search(name=searchNameEntry.get(), manufacturer=searchManufacturerEntry.get(), country=searchCountryEntry.get(), limit=10)
 		for index in range(len(products)):
 			product = products[index]
 			CreateProduct(searchProductsFrame, index + 2, product, ">", lambda product=product: AddBasketProduct(product))
 
-	CreateButton(searchProductsFrame, "Найти", None).grid(row=1, column=4)
+
+	CreateButton(searchProductsFrame, "Найти", UpdateSearchProducts).grid(row=1, column=4)
+
+	searchProductsFrameHeadSize = len(searchProductsFrame.winfo_children())
 
 	UpdateSearchProducts()
 
