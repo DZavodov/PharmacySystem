@@ -198,14 +198,13 @@ if __name__ == "__main__":
 	searchProductsFrame = Frame(windows, padx=5, pady=5)
 	searchProductsFrame.grid(row=1)
 
-	
-	def CreateLabel(root, row:int, column:int, text:str):
+	def CreateLabel(root:Misc, row:int, column:int, text:str):
 		"""
 		"""
 
 		Label(root, text = text, padx=5, pady=5, fg='red', bg='yellow', width=15, height=2).grid(row=row, column=column, sticky="we")
 
-	def CreateProduct(root, index:int, product:Product, buttonText:str):
+	def CreateProduct(root:Misc, index:int, product:Product, buttonText:str):
 		"""
 		"""
 
@@ -216,27 +215,27 @@ if __name__ == "__main__":
 		
 		Button(root, text=buttonText, padx=5, pady=5, width=15, height=2).grid(row=index, column=4)
 
+	CreateLabel(searchProductsFrame, 0, 0, "Наименование")
+	CreateLabel(searchProductsFrame, 0, 1, "Производитель")
+	CreateLabel(searchProductsFrame, 0, 2, "Страна")
+	CreateLabel(searchProductsFrame, 0, 3, "Цена")
+
+	def CreateEntry(column:int):
+		Entry(searchProductsFrame).grid(row=1, column=column, sticky="we")
+
+	CreateEntry(0)
+	CreateEntry(1)
+	CreateEntry(2)
+	CreateEntry(3)
+
 	def Search():
 		"""
 		"""
 
-		for widget in searchProductsFrame.winfo_children():
-			widget.destroy()
+		for index in range(len(searchProductsFrame.winfo_children()) - 8):
+			searchProductsFrame.winfo_children().pop().destroy()
 
 		products = facade.Search(name = "todo", limit = 10)
-
-		CreateLabel(searchProductsFrame, 0, 0, "Наименование")
-		CreateLabel(searchProductsFrame, 0, 1, "Производитель")
-		CreateLabel(searchProductsFrame, 0, 2, "Страна")
-		CreateLabel(searchProductsFrame, 0, 3, "Цена")
-
-		def CreateEntry(row:int, column:int):
-			Entry(searchProductsFrame).grid(row=row, column=column, sticky="we")
-
-		CreateEntry(1, 0)
-		CreateEntry(1, 1)
-		CreateEntry(1, 2)
-		CreateEntry(1, 3)
 		for index in range(2, len(products) + 2):
 			CreateProduct(searchProductsFrame, index, products[index - 2], ">")
 
