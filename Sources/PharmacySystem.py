@@ -232,13 +232,13 @@ if __name__ == "__main__":
 		"""
 		"""
 
-		for index in range(len(searchProductsFrame.winfo_children()) - 8):
+		for index in range(len(searchProductsFrame.winfo_children()) - 9):
 			searchProductsFrame.winfo_children().pop().destroy()
 
 		products = facade.Search(name = "todo", limit = 10)
 		for index in range(2, len(products) + 2):
 			CreateProduct(searchProductsFrame, index, products[index - 2], ">")
-
+	Button(searchProductsFrame, text = "Найти", padx=5, pady=5, width=15, height=0, command=Search).grid(row=1, column=4)
 	Search()
 
 	mainloop()
