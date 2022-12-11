@@ -202,7 +202,13 @@ if __name__ == "__main__":
 		"""
 		"""
 
-		Label(root, text = text, padx=5, pady=5, fg='red', bg='yellow', width=15, height=2).grid(row=row, column=column, sticky="we")
+		Label(root, text = text, padx=5, pady=5, fg='red', bg='yellow', width=15, height=0).grid(row=row, column=column, sticky="we")
+
+	def CreateButton(root:Misc, text:str, command):
+		"""
+		"""
+
+		return Button(root, text=text, padx=5, pady=5, width=15, height=0)
 
 	def CreateProduct(root:Misc, index:int, product:Product, buttonText:str):
 		"""
@@ -212,8 +218,8 @@ if __name__ == "__main__":
 		CreateLabel(root, index, 1, product.manufacturer)
 		CreateLabel(root, index, 2, product.country)
 		CreateLabel(root, index, 3, product.price)
-		
-		Button(root, text=buttonText, padx=5, pady=5, width=15, height=2).grid(row=index, column=4)
+
+		CreateButton(root, buttonText, None).grid(row=index, column=4)
 
 	CreateLabel(searchProductsFrame, 0, 0, "Наименование")
 	CreateLabel(searchProductsFrame, 0, 1, "Производитель")
@@ -228,17 +234,44 @@ if __name__ == "__main__":
 	CreateEntry(2)
 	CreateEntry(3)
 
-	def Search():
+	def UpdateSearchProducts():
 		"""
 		"""
 
 		for index in range(len(searchProductsFrame.winfo_children()) - 9):
 			searchProductsFrame.winfo_children().pop().destroy()
 
-		products = facade.Search(name = "todo", limit = 10)
-		for index in range(2, len(products) + 2):
-			CreateProduct(searchProductsFrame, index, products[index - 2], ">")
-	Button(searchProductsFrame, text = "Найти", padx=5, pady=5, width=15, height=0, command=Search).grid(row=1, column=4)
-	Search()
+		products = facade.Search(name = "None", limit = 10)
+		for index in range(len(products)):
+			CreateProduct(searchProductsFrame, index + 2, products[index], ">")
+
+	CreateButton(searchProductsFrame, "Найти", None).grid(row=1, column=4)
+
+	UpdateSearchProducts()
+
+	basketProductsFrame = Frame(windows, padx=5, pady=5)
+	basketProductsFrame.grid(row=1, column=2)
+
+	facade.basketProducts.append(Product("None","None","None",0))
+	facade.basketProducts.append(Product("None","None","None",0))
+	facade.basketProducts.append(Product("None","None","None",0))
+	facade.basketProducts.append(Product("None","None","None",0))
+
+	CreateLabel(basketProductsFrame, 0, 0, "Наименование")
+	CreateLabel(basketProductsFrame, 0, 1, "Производитель")
+	CreateLabel(basketProductsFrame, 0, 2, "Страна")
+	CreateLabel(basketProductsFrame, 0, 3, "Цена")
+
+	def UpdateBasketProducts():
+		"""
+		"""
+
+		for index in range(len(basketProductsFrame.winfo_children()) - 4):
+			basketProductsFrame.winfo_children().pop().destroy()
+
+		for index in range(len(facade.basketProducts)):
+			CreateProduct(basketProductsFrame, index + 1, facade.basketProducts[index], "X")
+
+	UpdateBasketProducts()
 
 	mainloop()
