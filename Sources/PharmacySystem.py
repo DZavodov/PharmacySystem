@@ -194,7 +194,8 @@ if __name__ == "__main__":
 	headerFrame = Frame(windows, padx=5, pady=5)
 	headerFrame.grid(row=0, column=1)
 	Label(headerFrame, text='Pharmacy System', padx=5, pady=5).pack()
-
+	
+	# Search
 	searchProductsFrame = Frame(windows, padx=5, pady=5)
 	searchProductsFrame.grid(row=1)
 
@@ -235,38 +236,35 @@ if __name__ == "__main__":
 	def UpdateSearchProducts():
 		"""
 		"""
+		
+		def AddBasketProduct(product:Product):
+			"""
+			"""
+
+			facade.basketProducts.append(product)
+
+			UpdateBasketProducts()
 
 		for index in range(len(searchProductsFrame.winfo_children()) - searchProductsFrameHeadSize):
 			searchProductsFrame.winfo_children().pop().destroy()
 
 		products = facade.Search(name = "None", limit = 10)
 		for index in range(len(products)):
-			CreateProduct(searchProductsFrame, index + 2, products[index], ">", None)
+			product = products[index]
+			CreateProduct(searchProductsFrame, index + 2, product, ">", lambda: AddBasketProduct(product))
 
 	CreateButton(searchProductsFrame, "Найти", None).grid(row=1, column=4)
 
 	UpdateSearchProducts()
 
+	# Basket
 	basketProductsFrame = Frame(windows, padx=5, pady=5)
 	basketProductsFrame.grid(row=1, column=2)
-
-	facade.basketProducts.append(Product("None","None","None",0))
-	facade.basketProducts.append(Product("None","None","None",0))
-	facade.basketProducts.append(Product("None","None","None",0))
-	facade.basketProducts.append(Product("None","None","None",0))
 
 	CreateLabel(basketProductsFrame, "Наименование").grid(row=0, column=0)
 	CreateLabel(basketProductsFrame, "Производитель").grid(row=0, column=1)
 	CreateLabel(basketProductsFrame, "Страна").grid(row=0, column=2)
 	CreateLabel(basketProductsFrame, "Цена").grid(row=0, column=3)
-	
-	def DeleteBasketProduct(index:int):
-		"""
-		"""
-
-		facade.basketProducts.pop(index)
-
-		UpdateBasketProducts()
 
 	basketProductsFrameHeadSize = len(basketProductsFrame.winfo_children())
 	def UpdateBasketProducts():
@@ -275,9 +273,17 @@ if __name__ == "__main__":
 
 		for index in range(len(basketProductsFrame.winfo_children()) - basketProductsFrameHeadSize):
 			basketProductsFrame.winfo_children().pop().destroy()
+	
+		def RemoveBasketProduct(index:int):
+			"""
+			"""
+
+			facade.basketProducts.pop(index)
+
+			UpdateBasketProducts()
 
 		for index in range(len(facade.basketProducts)):
-			CreateProduct(basketProductsFrame, index + 1, facade.basketProducts[index], "X", lambda index=index: DeleteBasketProduct(index))
+			CreateProduct(basketProductsFrame, index + 1, facade.basketProducts[index], "X", lambda index=index: RemoveBasketProduct(index))
 
 	UpdateBasketProducts()
 
