@@ -208,29 +208,30 @@ if __name__ == "__main__":
 
 		products = facade.Search(name = name, limit = 10)
 
-		def CreateColumn(index:int, column:int, text:str):
-			"""
-			"""
-			Label(searchProductsFrame, text = text, padx=5, pady=5, fg='red', bg='yellow', width=15, height=2).grid(row=index, column=column, sticky="we")
-
-		def CreateRow(index:int, product:Product):
+		def CreateLabel(row:int, column:int, text:str):
 			"""
 			"""
 
-			CreateColumn(index, 0, product.name)
-			CreateColumn(index, 1, product.manufacturer)
-			CreateColumn(index, 2, product.country)
-			CreateColumn(index, 3, product.price)
+			Label(searchProductsFrame, text = text, padx=5, pady=5, fg='red', bg='yellow', width=15, height=2).grid(row=row, column=column, sticky="we")
+
+		def CreateProduct(index:int, product:Product):
+			"""
+			"""
+
+			CreateLabel(index, 0, product.name)
+			CreateLabel(index, 1, product.manufacturer)
+			CreateLabel(index, 2, product.country)
+			CreateLabel(index, 3, product.price)
 			
 			Button(searchProductsFrame, text = "->", padx=5, pady=5, width=15, height=2).grid(row=index, column=4)
 
-		CreateColumn(0, 0, "Наименование")
-		CreateColumn(0, 1, "Производитель")
-		CreateColumn(0, 2, "Страна")
-		CreateColumn(0, 3, "Цена")
+		CreateLabel(0, 0, "Наименование")
+		CreateLabel(0, 1, "Производитель")
+		CreateLabel(0, 2, "Страна")
+		CreateLabel(0, 3, "Цена")
 
 		for index in range(1, len(products) + 1):
-			CreateRow(index, products[index - 1])
+			CreateProduct(index, products[index - 1])
 
 	name = "None"
 	Search()
