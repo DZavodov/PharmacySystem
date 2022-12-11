@@ -196,7 +196,25 @@ if __name__ == "__main__":
 	Label(headerFrame, text='Pharmacy System', padx=5, pady=5).pack()
 
 	searchProductsFrame = Frame(windows, padx=5, pady=5)
-	searchProductsFrame.grid(row=2)
+	searchProductsFrame.grid(row=1)
+
+	
+	def CreateLabel(root, row:int, column:int, text:str):
+		"""
+		"""
+
+		Label(root, text = text, padx=5, pady=5, fg='red', bg='yellow', width=15, height=2).grid(row=row, column=column, sticky="we")
+
+	def CreateProduct(root, index:int, product:Product, buttonText:str):
+		"""
+		"""
+
+		CreateLabel(root, index, 0, product.name)
+		CreateLabel(root, index, 1, product.manufacturer)
+		CreateLabel(root, index, 2, product.country)
+		CreateLabel(root, index, 3, product.price)
+		
+		Button(root, text=buttonText, padx=5, pady=5, width=15, height=2).grid(row=index, column=4)
 
 	def Search():
 		"""
@@ -207,27 +225,10 @@ if __name__ == "__main__":
 
 		products = facade.Search(name = "todo", limit = 10)
 
-		def CreateLabel(row:int, column:int, text:str):
-			"""
-			"""
-
-			Label(searchProductsFrame, text = text, padx=5, pady=5, fg='red', bg='yellow', width=15, height=2).grid(row=row, column=column, sticky="we")
-
-		def CreateProduct(index:int, product:Product):
-			"""
-			"""
-
-			CreateLabel(index, 0, product.name)
-			CreateLabel(index, 1, product.manufacturer)
-			CreateLabel(index, 2, product.country)
-			CreateLabel(index, 3, product.price)
-			
-			Button(searchProductsFrame, text = "->", padx=5, pady=5, width=15, height=2).grid(row=index, column=4)
-
-		CreateLabel(0, 0, "Наименование")
-		CreateLabel(0, 1, "Производитель")
-		CreateLabel(0, 2, "Страна")
-		CreateLabel(0, 3, "Цена")
+		CreateLabel(searchProductsFrame, 0, 0, "Наименование")
+		CreateLabel(searchProductsFrame, 0, 1, "Производитель")
+		CreateLabel(searchProductsFrame, 0, 2, "Страна")
+		CreateLabel(searchProductsFrame, 0, 3, "Цена")
 
 		def CreateEntry(row:int, column:int):
 			Entry(searchProductsFrame).grid(row=row, column=column, sticky="we")
@@ -237,7 +238,7 @@ if __name__ == "__main__":
 		CreateEntry(1, 2)
 		CreateEntry(1, 3)
 		for index in range(2, len(products) + 2):
-			CreateProduct(index, products[index - 2])
+			CreateProduct(searchProductsFrame, index, products[index - 2], ">")
 
 	Search()
 
