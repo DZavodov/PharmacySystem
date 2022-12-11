@@ -191,32 +191,50 @@ if __name__ == "__main__":
 	windows = Tk()
 	windows.geometry('1000x600')
 
-	frame = Frame(windows, padx=5, pady=5)
-	frame.grid(row=0, column=1)
-	Label(frame, text='Pharmacy System', padx=5, pady=5).pack()
+	headerFrame = Frame(windows, padx=5, pady=5)
+	headerFrame.grid(row=0, column=1)
+	Label(headerFrame, text='Pharmacy System', padx=5, pady=5).pack()
 
-	frame1 = Frame(windows, padx=5, pady=5)
-	frame1.grid(row=2, column=0)
+	searchProductsFrame = Frame(windows, padx=5, pady=5)
+	searchProductsFrame.grid(row=2, column=0)
 
-	rows = 5
-	columns = 5
-	for i in range(rows):
-		for j in range(columns):
-			Label(frame1, text=f'{i} {j}', padx=5, pady=5, fg='red', bg='yellow', 
-				width=15, height=2).grid(row=i, column=j, sticky="we")
-			if j == 4:
-				Button(frame1, text=f'{i} {j}', padx=5, pady=5, width=15, height=2).grid(row=i, column=j)
-		#windows.grid_columnconfigure(i, minsize=400)
+	name = ""
+	def Search():
+		"""
+		"""
 
-	#Label(frame1, text='Name', padx=5, pady=5).pack()
-	#Label(frame1, text='Email', padx=5, pady=5).pack()
-	#Label(frame1, text='Password', padx=5, pady=5).pack()
-	
-	frame2 = Frame(windows, padx=5, pady=5)
-	frame2.grid(row=2, column=1)
+		for widget in searchProductsFrame.winfo_children():
+			widget.destroy()
 
-	#for i in range(rows):
-	#	for j in range(1):
-	#		Button(frame2, text='{i} {j}', padx=5, pady=5, width=15, height=2).grid(row=i, column=j)
+		products = facade.Search(name = name, limit = 10)
+
+		def CreateColumn(index:int, column:int, text:str):
+			"""
+			"""
+			Label(searchProductsFrame, text = text, padx=5, pady=5, fg='red', bg='yellow', width=15, height=2).grid(row=index, column=column, sticky="we")
+
+		def CreateRow(index:int, product:Product):
+			"""
+			"""
+
+			CreateColumn(index, 0, product.name)
+			CreateColumn(index, 1, product.manufacturer)
+			CreateColumn(index, 2, product.country)
+			CreateColumn(index, 3, product.price)
+			
+			Button(searchProductsFrame, text = "->", padx=5, pady=5, width=15, height=2).grid(row=index, column=4)
+
+		CreateColumn(0, 0, "Наименование")
+		CreateColumn(0, 1, "Производитель")
+		CreateColumn(0, 2, "Страна")
+		CreateColumn(0, 3, "Цена")
+
+		for index in range(1, len(products) + 1):
+			CreateRow(index, products[index - 1])
+
+	name = "None"
+	Search()
+	name = "None0"
+	Search()
 
 	mainloop()
