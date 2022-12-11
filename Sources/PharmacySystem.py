@@ -198,11 +198,11 @@ if __name__ == "__main__":
 	searchProductsFrame = Frame(windows, padx=5, pady=5)
 	searchProductsFrame.grid(row=1)
 
-	def CreateLabel(root:Misc, row:int, column:int, text:str):
+	def CreateLabel(root:Misc, text:str):
 		"""
 		"""
 
-		Label(root, text = text, padx=5, pady=5, fg='red', bg='yellow', width=15, height=0).grid(row=row, column=column, sticky="we")
+		return Label(root, text = text, padx=5, pady=5, width=15, height=0)
 
 	def CreateButton(root:Misc, text:str, command):
 		"""
@@ -214,22 +214,22 @@ if __name__ == "__main__":
 		"""
 		"""
 
-		CreateLabel(root, index, 0, product.name)
-		CreateLabel(root, index, 1, product.manufacturer)
-		CreateLabel(root, index, 2, product.country)
-		CreateLabel(root, index, 3, product.price)
+		CreateLabel(root, product.name).grid(row=index, column=0)
+		CreateLabel(root, product.manufacturer).grid(row=index, column=1)
+		CreateLabel(root, product.country).grid(row=index, column=2)
+		CreateLabel(root, product.price).grid(row=index, column=3)
 
 		CreateButton(root, buttonText, buttonCommand).grid(row=index, column=4)
 
-	CreateLabel(searchProductsFrame, 0, 0, "Наименование")
-	CreateLabel(searchProductsFrame, 0, 1, "Производитель")
-	CreateLabel(searchProductsFrame, 0, 2, "Страна")
-	CreateLabel(searchProductsFrame, 0, 3, "Цена")
+	CreateLabel(searchProductsFrame, "Наименование").grid(row=0, column=0)
+	CreateLabel(searchProductsFrame, "Производитель").grid(row=0, column=1)
+	CreateLabel(searchProductsFrame, "Страна").grid(row=0, column=2)
+	CreateLabel(searchProductsFrame, "Цена").grid(row=0, column=3)
 
-	Entry(searchProductsFrame).grid(row=1, column=0, sticky="we")
-	Entry(searchProductsFrame).grid(row=1, column=1, sticky="we")
-	Entry(searchProductsFrame).grid(row=1, column=2, sticky="we")
-	Entry(searchProductsFrame).grid(row=1, column=3, sticky="we")
+	Entry(searchProductsFrame).grid(row=1, column=0)
+	Entry(searchProductsFrame).grid(row=1, column=1)
+	Entry(searchProductsFrame).grid(row=1, column=2)
+	Entry(searchProductsFrame).grid(row=1, column=3)
 
 	def UpdateSearchProducts():
 		"""
@@ -254,10 +254,10 @@ if __name__ == "__main__":
 	facade.basketProducts.append(Product("None","None","None",0))
 	facade.basketProducts.append(Product("None","None","None",0))
 
-	CreateLabel(basketProductsFrame, 0, 0, "Наименование")
-	CreateLabel(basketProductsFrame, 0, 1, "Производитель")
-	CreateLabel(basketProductsFrame, 0, 2, "Страна")
-	CreateLabel(basketProductsFrame, 0, 3, "Цена")
+	CreateLabel(basketProductsFrame, "Наименование").grid(row=0, column=0)
+	CreateLabel(basketProductsFrame, "Производитель").grid(row=0, column=1)
+	CreateLabel(basketProductsFrame, "Страна").grid(row=0, column=2)
+	CreateLabel(basketProductsFrame, "Цена").grid(row=0, column=3)
 
 	def DeleteBasketProduct(index:int):
 		"""
