@@ -231,11 +231,12 @@ if __name__ == "__main__":
 	Entry(searchProductsFrame).grid(row=1, column=2)
 	Entry(searchProductsFrame).grid(row=1, column=3)
 
+	searchProductsFrameHeadSize = len(searchProductsFrame.winfo_children())
 	def UpdateSearchProducts():
 		"""
 		"""
 
-		for index in range(len(searchProductsFrame.winfo_children()) - 9):
+		for index in range(len(searchProductsFrame.winfo_children()) - searchProductsFrameHeadSize):
 			searchProductsFrame.winfo_children().pop().destroy()
 
 		products = facade.Search(name = "None", limit = 10)
@@ -258,7 +259,7 @@ if __name__ == "__main__":
 	CreateLabel(basketProductsFrame, "Производитель").grid(row=0, column=1)
 	CreateLabel(basketProductsFrame, "Страна").grid(row=0, column=2)
 	CreateLabel(basketProductsFrame, "Цена").grid(row=0, column=3)
-
+	
 	def DeleteBasketProduct(index:int):
 		"""
 		"""
@@ -267,11 +268,12 @@ if __name__ == "__main__":
 
 		UpdateBasketProducts()
 
+	basketProductsFrameHeadSize = len(basketProductsFrame.winfo_children())
 	def UpdateBasketProducts():
 		"""
 		"""
 
-		for index in range(len(basketProductsFrame.winfo_children()) - 4):
+		for index in range(len(basketProductsFrame.winfo_children()) - basketProductsFrameHeadSize):
 			basketProductsFrame.winfo_children().pop().destroy()
 
 		for index in range(len(facade.basketProducts)):
