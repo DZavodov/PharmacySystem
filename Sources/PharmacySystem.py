@@ -196,9 +196,8 @@ if __name__ == "__main__":
 	Label(headerFrame, text='Pharmacy System', padx=5, pady=5).pack()
 
 	searchProductsFrame = Frame(windows, padx=5, pady=5)
-	searchProductsFrame.grid(row=2, column=0)
+	searchProductsFrame.grid(row=2)
 
-	name = ""
 	def Search():
 		"""
 		"""
@@ -206,7 +205,7 @@ if __name__ == "__main__":
 		for widget in searchProductsFrame.winfo_children():
 			widget.destroy()
 
-		products = facade.Search(name = name, limit = 10)
+		products = facade.Search(name = "todo", limit = 10)
 
 		def CreateLabel(row:int, column:int, text:str):
 			"""
@@ -230,12 +229,16 @@ if __name__ == "__main__":
 		CreateLabel(0, 2, "Страна")
 		CreateLabel(0, 3, "Цена")
 
-		for index in range(1, len(products) + 1):
-			CreateProduct(index, products[index - 1])
+		def CreateEntry(row:int, column:int):
+			Entry(searchProductsFrame).grid(row=row, column=column, sticky="we")
 
-	name = "None"
-	Search()
-	name = "None0"
+		CreateEntry(1, 0)
+		CreateEntry(1, 1)
+		CreateEntry(1, 2)
+		CreateEntry(1, 3)
+		for index in range(2, len(products) + 2):
+			CreateProduct(index, products[index - 2])
+
 	Search()
 
 	mainloop()
